@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_function" value="public.uuid_generate_v4()" dbms="postgresql"/>
+
+    <changeSet id="create_user_table" author="sixpathssage">
+        <createTable tableName="user">
+            <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints nullable="false" unique="true" primaryKey="true" />
+            </column>
+            
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_name" type="varchar(15)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="email" type="varchar(256)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="age" type="integer">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_on" type="timestamp" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated_on" type="timestamptz">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="is_active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_locked" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_check_constraint_for_age" author="sixpathssage">
+        <sql>
+            ALTER TABLE public.user ADD CONSTRAINT legal_age CHECK (age &gt;=18 AND age &lt;= 125)
+        </sql>
+    </changeSet>
+    
+</databaseChangeLog>

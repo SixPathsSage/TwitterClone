@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_function" value="public.uuid_generate_v4()" dbms="postgresql"/>
+
+    <changeSet id="create_tweet_table" author="sixpathssage">
+        <createTable tableName="tweet">
+            <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints nullable="false" unique="true" primaryKey="true" />
+            </column>
+
+            <column name="tweet_text" type="varchar(280)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="views" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="tweeted_on" type="timestamp" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="tweeted_by" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
